@@ -6,6 +6,7 @@ import com.istvan.spring.demo.SpringDemo.service.TourService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 @RestController
@@ -38,7 +41,7 @@ public class TourController {
     public String refresh(@RequestParam("filter") String filter, HttpServletRequest request) {
         if(!request.isUserInRole("ROLE_ADMIN")) {
             logger.info("[ ... insufficient privilege ...]");
-            return ResponseEntity.status(403).build().getStatusCode().toString();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build().getStatusCode().toString();
         }
 
         Util util = new Util();
@@ -58,18 +61,29 @@ public class TourController {
 
     @GetMapping(value = "/v/1.0/tours", produces = "application/json")
     public String getTours(@RequestParam("filter") String filter) {
-        Iterator<Tour> tourIter = tourService.findAllTours().iterator();
         JSONArray array = new JSONArray();
-        while(tourIter.hasNext()){
-            Tour tour = (Tour) tourIter.next();
-            if(filter == null || filter.isEmpty())
-                array.put(tour.getName());
-            else if(tour.getShortDesc().toLowerCase().contains(filter.toLowerCase()))
-                array.put(tour.getName());
+        try {
+            long start = System.currentTimeMillis();
+            List<Tour>list = tourService.findAllTours().get();
+            long end = System.currentTimeMillis();
+            logger.info(" :: time taken :" + (end - start));
+            filter = filter.trim();
+            for(Tour tour: list) {
+                if(filter == null || filter.isEmpty())
+                    array.put(tour.getName());
+                else if(tour.getShortDesc().toLowerCase().contains(filter.toLowerCase()))
+                    array.put(tour.getName());
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
+
         /// build a json response
         JSONObject jobj = new JSONObject();
         jobj.put("tours", array);
         return jobj.toString();
     }
+
 }

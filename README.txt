@@ -6,4 +6,4 @@ User role is achieved by Spring Security by extending WebSecurityConfigurerAdapt
 Admin user can download and insert the data into the in-memory database. This is  POST request and can be made only by user with admin rights.
 
 
-
+![](post.png)

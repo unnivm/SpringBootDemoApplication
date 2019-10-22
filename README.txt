@@ -3,7 +3,4 @@ This application is loading the places catalog based on the admin role.  There a
 
 User role is achieved by Spring Security by extending WebSecurityConfigurerAdapter class. The roles are "ROLE_ADMIN"  and "ROLE_USER". You can go through CustomWebSecurityConfigurerAdapter class more details.
 
-Admin user can download and insert the data into the in-memory database. This is a POST request and can be made only by user with admin rights.
-
-
-![](images/post.png)
+Admin user can download and insert the data into the in-memory database. This is a POST request and can be made only by user with admin right

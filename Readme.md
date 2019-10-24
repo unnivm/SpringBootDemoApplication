@@ -8,3 +8,5 @@ User role is achieved by Spring Security by extending WebSecurityConfigurerAdapt
 Admin user can download and insert the data into the in-memory database. This is a POST request and can be made only by user with admin right. The following image shows a POST request made by POSTMAN tool.
 
 ![post](https://user-images.githubusercontent.com/968987/67464831-a7dc3d00-f661-11e9-92ee-c7cd8015b6e2.png)
+
+The data is extracted from the external site and saved into the in-memory H2 database.

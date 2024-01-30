@@ -10,7 +10,7 @@ Admin user can download and insert the data into the in-memory database. This is
 ![post](https://user-images.githubusercontent.com/968987/67464831-a7dc3d00-f661-11e9-92ee-c7cd8015b6e2.png)
 
 The data is extracted from the external site and saved into the in-memory H2 database.
-This is only for testing okay
+This is only for testing
 
 
 
